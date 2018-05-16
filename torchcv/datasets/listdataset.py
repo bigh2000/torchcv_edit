@@ -58,6 +58,14 @@ class ListDataset(data.Dataset):
                 label.append(int(c))
             self.boxes.append(torch.Tensor(box))
             self.labels.append(torch.LongTensor(label))
+        '''
+        <li><i>Person:</i> person_14</li>
+        <li><i>Animal:</i> bird_2, cat_7, cow_9, dog_11, horse_12, sheep_16</li>
+        <li><i>Vehicle:</i> aeroplane_0, bicycle_1, boat_3, bus_5, car_6, motorbike_13, train_18</li>
+        <li><i>Indoor:</i> bottle_4, chair_8, dining table_10, potted plant_15, sofa_17,
+        tv/monitor_19</li>
+        '''
+        print('')
 
     def __getitem__(self, idx):
         '''Load image.

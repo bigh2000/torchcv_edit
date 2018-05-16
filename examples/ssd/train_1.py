@@ -20,7 +20,7 @@ from torchcv.models.fpnssd import FPNSSD512
 from torchcv.models.ssd import SSD300, SSD512, SSDBoxCoder
 
 from torchcv.loss import SSDLoss
-from torchcv.datasets import ListDataset
+from torchcv.datasets import listdataset_1
 from torchcv.transforms import resize, random_flip, random_paste, random_crop, random_distort
 
 
@@ -63,9 +63,8 @@ def transform_train(img, boxes, labels):
     boxes, labels = box_coder.encode(boxes, labels)
     return img, boxes, labels
 
-trainset = ListDataset(root='../../../Datasets/VOC/VOCdevkit/VOC2007/JPEGImages',
-                       list_file='../../torchcv/datasets/voc/voc07_trainval.txt',
-                       transform=transform_train)
+trainset = listdataset_1.ListDataset(img_path='/home/dokyoung/Desktop/server/vanno_data/celeb/0',
+                       anno_path='/home/dokyoung/Desktop/server/vanno_data/celeb/0')
 
 def transform_test(img, boxes, labels):
     img, boxes = resize(img, boxes, size=(img_size,img_size))
@@ -76,9 +75,8 @@ def transform_test(img, boxes, labels):
     boxes, labels = box_coder.encode(boxes, labels)
     return img, boxes, labels
 
-testset = ListDataset(root='../../../Datasets/VOC/VOCdevkit/VOC2007/JPEGImages',
-                      list_file='../../torchcv/datasets/voc/voc07_test.txt',
-                      transform=transform_test)
+testset = listdataset_1.ListDataset(img_path='/home/dokyoung/Desktop/server/vanno_data/celeb/0',
+                      anno_path='/home/dokyoung/Desktop/server/vanno_data/celeb/0')
 
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=8, shuffle=True, num_workers=8)
 testloader = torch.utils.data.DataLoader(testset, batch_size=8, shuffle=False, num_workers=8)
