@@ -1,5 +1,5 @@
 import os
-import PIL
+import PIL.Image
 import torch
 import torch.utils.data as data
 import xml.etree.ElementTree as ElementTree
@@ -26,15 +26,13 @@ class ListDataset(data.Dataset):
         print('list of intersection: ', ls_inter)
         self.num_imgs = len(ls_inter)
         print('img: ', len(ls_img), 'anno: ', len(ls_anno), 'intersection: ', len(ls_inter))
-        ls_inter_jpg = [f + '.jpg' for f in ls_inter]
-        ls_inter_xml = [f + '.xml' for f in ls_inter]
 
         i=1
-        for xml in ls_inter_xml:
-            tree = ElementTree.parse(anno_path + '/' + xml)
-            print('%03d, filename: ' % i, xml)
+        for f in ls_inter:
+            tree = ElementTree.parse(anno_path + '/' + f + '.xml')
+            print('%03d, filename: ' % i, f + '.xml')
             i += 1
-            self.fnames.append(xml)
+            self.fnames.append(f + '.jpg')
             root = tree.getroot()
             j = 0
             for obj in root.findall('object'):
@@ -61,8 +59,8 @@ class ListDataset(data.Dataset):
         if img.mode != 'RGB':
             img = img.convert('RGB')
 
-        boxes = self.boxes[idx].clone()  # use clone to avoid any potential change.
-        labels = self.labels[idx].clone()
+        boxes = self.boxes[idx]  # use clone to avoid any potential change.
+        labels = self.labels[idx]
 
         if self.transform:
             img, boxes, labels = self.transform(img, boxes, labels)

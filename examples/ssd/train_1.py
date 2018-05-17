@@ -64,7 +64,7 @@ def transform_train(img, boxes, labels):
     return img, boxes, labels
 
 trainset = listdataset_1.ListDataset(img_path='/home/dokyoung/Desktop/server/vanno_data/celeb/0',
-                       anno_path='/home/dokyoung/Desktop/server/vanno_data/celeb/0')
+                       anno_path='/home/dokyoung/Desktop/server/vanno_results/celeb/0')
 
 def transform_test(img, boxes, labels):
     img, boxes = resize(img, boxes, size=(img_size,img_size))
@@ -76,7 +76,7 @@ def transform_test(img, boxes, labels):
     return img, boxes, labels
 
 testset = listdataset_1.ListDataset(img_path='/home/dokyoung/Desktop/server/vanno_data/celeb/0',
-                      anno_path='/home/dokyoung/Desktop/server/vanno_data/celeb/0')
+                      anno_path='/home/dokyoung/Desktop/server/vanno_results/celeb/0')
 
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=8, shuffle=True, num_workers=8)
 testloader = torch.utils.data.DataLoader(testset, batch_size=8, shuffle=False, num_workers=8)
