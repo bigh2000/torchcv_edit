@@ -1,36 +1,67 @@
 '''
-그림파일을 annotation과 함께 표시(opencv)
+그림파일 리스트를 annotation과 함께 표시(opencv), 이미지가 클 경우 resize
 '''
 import cv2
+import numpy as np
 import os
 import time
+from torchcv.datasets import listdataset_1
 import xml.etree.ElementTree as ElementTree
 
 img_path = '/home/dokyoung/Desktop/server/vanno_data/celeb/0'
 anno_path = '/home/dokyoung/Desktop/server/vanno_results/celeb/0'
+trainset = listdataset_1.ListDataset(img_path, anno_path)
+
+# imgs = []
+# for i in range(len(trainset.labels)):
+#     if len(trainset.labels[i]) > 1:
+#         imgs.append(trainset.fnames[i])
+
 ext = '.jpg'
-cv2.namedWindow('test')
+fnames = [98, 277, 355, 486, 493, 510, 546, 556, 581, 600, 601, 627]
+fnames = ['%06d' % fname for fname in fnames]
+imgs = [fname + ext for fname in fnames]
 
-fname = '000001'
-img = cv2.imread(os.path.join(img_path, fname + ext))
-tree = ElementTree.parse(os.path.join(anno_path, fname + '.xml'))
-root = tree.getroot()
+for f in imgs:
+    img = cv2.imread(os.path.join(img_path, f))
+    tree = ElementTree.parse(os.path.join(anno_path, f.split('.')[0] + '.xml'))
+    root = tree.getroot()
 
-boxes = []
-labels = []
-box = []
-label = []
-for obj in root.findall('object'):
-    xmin = int(obj.find('bndbox').find('xmin').text)
-    ymin = int(obj.find('bndbox').find('ymin').text)
-    xmax = int(obj.find('bndbox').find('xmax').text)
-    ymax = int(obj.find('bndbox').find('ymax').text)
-    box.append([xmin, ymin, xmax, ymax])
+    for obj in root.findall('object'):
+        xmin = int(obj.find('bndbox').find('xmin').text)
+        ymin = int(obj.find('bndbox').find('ymin').text)
+        xmax = int(obj.find('bndbox').find('xmax').text)
+        ymax = int(obj.find('bndbox').find('ymax').text)
+        cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0, 0, 255), 1)
+    h, w = img.shape[:2]
+    if img.shape[0] > 2000:
+        zoom = cv2.resize(img, None, fx=0.25, fy=0.25)
+        cv2.imshow(f + '_resized', zoom)
+    elif img.shape[0] > 1000:
+        zoom = cv2.resize(img, None, fx=0.5, fy=0.5)
+        cv2.imshow(f + '_resized', zoom)
+    else:
+        cv2.imshow(f, img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-boxes.append(box)
-for box in boxes:
-    for b in box:
-        cv2.rectangle(img, (xmin,ymin), (xmax,ymax), (0,0,255), 3)
-cv2.imshow('test', img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+
+# 오류
+# 355 다른사람 얼굴 잡힘
+# 486 다른사람 얼굴 잡힘
+# 493 다른사람 얼굴 잡힘
+# 556 다른사람 얼굴 잡힘
+
+# 의심
+# 98 작은얼굴 일부러 안잡은거?
+# 277 아주작은얼굴, 옆얼굴,
+# 510 흐릿한얼굴 일부러 안잡은거?
+# 546 작은얼굴 일부러 안잡은거?
+# 581 옆얼굴 일부러 안잡은거?
+# 600 가려진 작은얼굴 일부러 안잡은거?
+# 601 작은얼굴 일부러 안잡은거?
+# 627 작은얼굴 일부러 안잡은거?
+
+# 중복은 일부러 넣은거?
+# 50 VS 85
+# 615 vs 641

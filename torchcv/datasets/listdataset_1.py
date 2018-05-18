@@ -70,10 +70,10 @@ class ListDataset(data.Dataset):
     def __len__(self):
         return self.num_imgs
 
-# img_path = '/home/dokyoung/Desktop/server/vanno_data/celeb/0'
-# anno_path = '/home/dokyoung/Desktop/server/vanno_results/celeb/0'
-
-# img_path = '../../../Datasets/vanno_data/celeb/0'
-# anno_path = '../../../Datasets/vanno_results/celeb/0'
-# trainset = ListDataset(img_path, anno_path)
-# print('')
+img_path = '/home/dokyoung/Desktop/server/vanno_data/celeb/0'
+anno_path = '/home/dokyoung/Desktop/server/vanno_results/celeb/0'
+trainset = ListDataset(img_path, anno_path)
+for i in range(len(trainset.labels)):
+    if len(trainset.labels[i]) > 1:
+        print(trainset.fnames[i], len(trainset.labels[i]), 'classes')
+print('')
