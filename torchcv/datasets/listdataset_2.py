@@ -36,7 +36,7 @@ class ListDataset(data.Dataset):
             i=1
             for f in ls_img_no_ext:
                 tree = ElementTree.parse(anno_path + '/' + f + '.xml')
-                print('%03d, filename: ' % i, f + '.xml')
+                # print('%03d, filename: ' % i, f + '.xml')
                 i += 1
                 root = tree.getroot()
                 for obj in root.findall('object'):
@@ -47,7 +47,7 @@ class ListDataset(data.Dataset):
                     self.fnames.append(os.path.join(os.path.join(self.img_path_super, d), f + '.jpg'))
                     self.boxes.append(torch.Tensor([[xmin, ymin, xmax, ymax]]))
                     self.labels.append(torch.LongTensor([int(d)]))
-                    print(int(d), xmin, ymin, xmax, ymax)
+                    # print(int(d), xmin, ymin, xmax, ymax)
 
     def __getitem__(self, idx):
         # Load image and boxes.
@@ -67,7 +67,7 @@ class ListDataset(data.Dataset):
     def __len__(self):
         return self.num_imgs
 
-img_path_super = '../../../Datasets/vanno_data/celeb'
-anno_path_super = '../../../Datasets/vanno_results/celeb'
-trainset = ListDataset(img_path_super, anno_path_super)
-print('')
+# img_path_super = '../../../Datasets/vanno_data/celeb'
+# anno_path_super = '../../../Datasets/vanno_results/celeb'
+# trainset = ListDataset(img_path_super, anno_path_super)
+# print('')

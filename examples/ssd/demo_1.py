@@ -14,7 +14,8 @@ net.load_state_dict(torch.load('../../../torchcv_edit_rel/checkpoint/ckpt.pth')[
 net.eval()
 
 print('Loading image..')
-img = Image.open('/home/dokyoung/Desktop/server/vanno_data/celeb/0/000068.jpg')
+# img = Image.open('/home/dokyoung/Desktop/server/vanno_data/celeb/0/000068.jpg')
+img = Image.open('../../../Datasets/vanno_data/celeb/0/000068.jpg')
 ow = oh = 512
 img = img.resize((ow,oh))
 

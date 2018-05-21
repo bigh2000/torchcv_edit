@@ -1,15 +1,16 @@
 '''
-그림파일 리스트를 annotation과 함께 표시(opencv), 이미지가 클 경우 resize
+그림파일 리스트를 annotation과 함께 표시(opencv), 이미지가 클 경우 resize.
 '''
 import cv2
-import numpy as np
 import os
-import time
-from torchcv.datasets import listdataset_1
 import xml.etree.ElementTree as ElementTree
 
-img_path = '/home/dokyoung/Desktop/server/vanno_data/celeb/0'
-anno_path = '/home/dokyoung/Desktop/server/vanno_results/celeb/0'
+from torchcv.datasets import listdataset_1
+
+# img_path = '/home/dokyoung/Desktop/server/vanno_data/celeb/0'
+# anno_path = '/home/dokyoung/Desktop/server/vanno_results/celeb/0'
+img_path = '../../../Datasets/vanno_data/celeb/0'
+anno_path = '../../../Datasets/vanno_results/celeb/0'
 trainset = listdataset_1.ListDataset(img_path, anno_path)
 
 # imgs = []
@@ -18,7 +19,8 @@ trainset = listdataset_1.ListDataset(img_path, anno_path)
 #         imgs.append(trainset.fnames[i])
 
 ext = '.jpg'
-fnames = [98, 277, 355, 486, 493, 510, 546, 556, 581, 600, 601, 627]
+# fnames = [98, 277, 355, 486, 493, 510, 546, 556, 581, 600, 601, 627]
+fnames = [355, 486, 493, 556]
 fnames = ['%06d' % fname for fname in fnames]
 imgs = [fname + ext for fname in fnames]
 
@@ -32,18 +34,29 @@ for f in imgs:
         ymin = int(obj.find('bndbox').find('ymin').text)
         xmax = int(obj.find('bndbox').find('xmax').text)
         ymax = int(obj.find('bndbox').find('ymax').text)
-        cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0, 0, 255), 1)
+        cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0, 0, 255), 2)
     h, w = img.shape[:2]
     if img.shape[0] > 2000:
+        cv2.namedWindow(f + '_resized', cv2.WINDOW_NORMAL)
+        cv2.moveWindow(f + '_resized', 0, 0)
         zoom = cv2.resize(img, None, fx=0.25, fy=0.25)
         cv2.imshow(f + '_resized', zoom)
     elif img.shape[0] > 1000:
+        cv2.namedWindow(f + '_resized', cv2.WINDOW_NORMAL)
+        cv2.moveWindow(f + '_resized', 0, 0)
         zoom = cv2.resize(img, None, fx=0.5, fy=0.5)
         cv2.imshow(f + '_resized', zoom)
     else:
+        # cv2.namedWindow(f, cv2.WINDOW_NORMAL)
+        # cv2.moveWindow(f, 0, 0)
         cv2.imshow(f, img)
+    # cv2.imshow(f, img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+    # import matplotlib.pyplot as plt
+    # plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    # plt.show()
 
 
 # 오류

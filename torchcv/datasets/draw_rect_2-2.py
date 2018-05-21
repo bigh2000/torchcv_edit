@@ -1,15 +1,15 @@
 '''
-폴더 내의 모든 그림파일을 annotation과 함께 표시(opencv), 이미지가 클 경우 resize
+폴더 내의 모든 그림파일을 annotation과 함께 표시(opencv), 이미지가 클 경우 resize.
 '''
 import cv2
 import os
-import time
 import xml.etree.ElementTree as ElementTree
 
-img_path = '/home/dokyoung/Desktop/server/vanno_data/celeb/0'
-anno_path = '/home/dokyoung/Desktop/server/vanno_results/celeb/0'
+# img_path = '/home/dokyoung/Desktop/server/vanno_data/celeb/0'
+# anno_path = '/home/dokyoung/Desktop/server/vanno_results/celeb/0'
+img_path = '../../../Datasets/vanno_data/celeb/0'
+anno_path = '../../../Datasets/vanno_results/celeb/0'
 
-# ext = '.jpg'
 imgs = os.listdir(img_path); imgs.sort()
 for f in imgs:
     fname = f.split('.')[0]
@@ -22,7 +22,7 @@ for f in imgs:
         ymin = int(obj.find('bndbox').find('ymin').text)
         xmax = int(obj.find('bndbox').find('xmax').text)
         ymax = int(obj.find('bndbox').find('ymax').text)
-        cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0, 0, 255), 1)
+        cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0, 0, 255), 2)
 
     h, w = img.shape[:2]
     if img.shape[0] > 2000:
